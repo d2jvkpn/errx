@@ -78,7 +78,10 @@ func testBizError(e error) (err *ErrX) {
 }
 
 func TestErrx02(t *testing.T) {
-	var err1, err2 *ErrX
+	var (
+		err1, err2 *ErrX
+		bts        []byte
+	)
 
 	err1 = NewErrXxx(Code("NotFound")).WithKind("biz_error").Trace()
 
@@ -89,8 +92,14 @@ func TestErrx02(t *testing.T) {
 	err1.WithErr(err2)
 	fmt.Printf("==> 2. err1: %+#v\n", err1)
 
-	bts, _ := json.Marshal(err1)
+	bts, _ = json.Marshal(err1)
 	fmt.Printf("==> 3. err1 json: %s\n", bts)
 
 	fmt.Printf("==> 4. err1 debug: %s\n", err1.Debug())
+
+	err1 = nil
+	bts, _ = json.Marshal(err1)
+	fmt.Printf("==> 5. err1 json: %s\n", bts)
+
+	fmt.Printf("==> 6. err1 debug: %s\n", err1.Debug())
 }

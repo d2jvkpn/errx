@@ -214,6 +214,10 @@ func (self *ErrX) Debug() string {
 		builder strings.Builder
 	)
 
+	if self == nil {
+		return "<nil>"
+	}
+
 	strs = make([]string, 0, 6)
 
 	if self.Kind != "" {
