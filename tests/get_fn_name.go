@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"reflect"
 	"runtime"
 	"strings"
-	"reflect"
 )
 
 func exampleFn() {
@@ -28,4 +28,3 @@ func main() {
 	fmt.Println("Function name:", getFunctionName(f))
 	// f()
 }
-

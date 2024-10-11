@@ -30,7 +30,7 @@ func TestErrx01(t *testing.T) {
 
 	fmt.Printf("==> b1. ErrX=%+#v\n", err)
 
-	fmt.Printf("==> b2. errors=%v\n", err.Errors)
+	fmt.Printf("==> b2. errors=%v\n", err.errors)
 
 	// 3.
 	err = fn01ErrX()

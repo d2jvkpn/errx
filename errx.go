@@ -11,10 +11,11 @@ import (
 )
 
 type ErrX struct {
-	Errors []error `json:"errors"`
-	Line   int     `json:"line"`
-	Fn     string  `json:"fn"`
-	File   string  `json:"file"`
+	errors []error
+
+	Line int    `json:"line"`
+	Fn   string `json:"fn"`
+	File string `json:"file"`
 
 	Kind string `json:"kind"`
 	Code string `json:"code"`
@@ -24,10 +25,10 @@ type ErrX struct {
 type Option func(*ErrX)
 
 func NewErrX(e error, options ...Option) (err *ErrX) {
-	err = &ErrX{Errors: make([]error, 0, 1)}
+	err = &ErrX{errors: make([]error, 0, 1)}
 
 	if e != nil {
-		err.Errors = append(err.Errors, e)
+		err.errors = append(err.errors, e)
 	}
 
 	for _, opt := range options {
@@ -99,7 +100,7 @@ func (self *ErrX) IsNil() bool {
 		return true
 	}
 
-	return len(self.Errors) == 0
+	return len(self.errors) == 0
 }
 
 func (self *ErrX) Error() string {
@@ -107,13 +108,13 @@ func (self *ErrX) Error() string {
 		return "<nil>"
 	}
 
-	return errors.Join(self.Errors...).Error()
+	return errors.Join(self.errors...).Error()
 }
 
 func (self *ErrX) WithErr(errs ...error) *ErrX {
 	for i := range errs {
 		if errs[i] != nil {
-			self.Errors = append(self.Errors, errs[i])
+			self.errors = append(self.errors, errs[i])
 		}
 	}
 
@@ -137,14 +138,14 @@ func (self *ErrX) WithMsg(str string) *ErrX {
 	return self
 }
 
-func (self *ErrX) ErrorsToJSON() (msgs []json.RawMessage) {
+func (self *ErrX) MarshalErrors() (msgs []json.RawMessage) {
 	var (
 		ok  bool
 		e   error
 		msg json.RawMessage
 	)
 
-	for _, e = range self.Errors {
+	for _, e = range self.errors {
 		if e == nil {
 			continue
 		}
@@ -173,7 +174,7 @@ func (self *ErrX) MarshalJSON() ([]byte, error) {
 		Code string `json:"code"`
 		Msg  string `json:"msg"`
 	}{
-		Errors: self.ErrorsToJSON(),
+		Errors: self.MarshalErrors(),
 		Line:   self.Line,
 		Fn:     self.Fn,
 		File:   self.File,
@@ -187,7 +188,7 @@ func (self *ErrX) MarshalJSON() ([]byte, error) {
 }
 
 func (self *ErrX) ErrKC() (string, string) {
-	return self.Code, self.Kind
+	return self.Kind, self.Code
 }
 
 func (self *ErrX) Debug() (bts json.RawMessage) {
@@ -197,7 +198,7 @@ func (self *ErrX) Debug() (bts json.RawMessage) {
 		Fn     string            `json:"fn"`
 		File   string            `json:"file"`
 	}{
-		Errors: self.ErrorsToJSON(),
+		Errors: self.MarshalErrors(),
 		Line:   self.Line,
 		Fn:     self.Fn,
 		File:   self.File,
