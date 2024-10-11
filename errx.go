@@ -26,11 +26,11 @@ type ErrX struct {
 type Option func(*ErrX)
 
 func NewErrX(e error, options ...Option) (err *ErrX) {
-	err = &ErrX{errors: make([]error, 0, 1)}
-
-	if e != nil {
-		err.errors = append(err.errors, e)
+	if e == nil {
+		return nil
 	}
+
+	err = &ErrX{errors: []error{e}}
 
 	for _, opt := range options {
 		opt(err)
@@ -68,14 +68,20 @@ func Msg(str string) Option {
 }
 
 // checks if the input is an ErrX
-func ErrXFrom(e error) (err *ErrX) {
+func ErrXFrom(e error, options ...Option) (err *ErrX) {
 	var ok bool
 
-	if err, ok = e.(*ErrX); ok {
-		return err
+	if e == nil {
+		return nil
 	}
 
-	err = NewErrX(e)
+	if err, ok = e.(*ErrX); !ok {
+		err = NewErrX(e)
+	}
+
+	for _, opt := range options {
+		opt(err)
+	}
 
 	return err
 }
