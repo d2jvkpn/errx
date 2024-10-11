@@ -39,6 +39,16 @@ func NewErrX(e error, options ...Option) (err *ErrX) {
 	return err
 }
 
+func NewErrXxx(options ...Option) (err *ErrX) {
+	err = &ErrX{errors: []error{errors.New("...")}}
+
+	for _, opt := range options {
+		opt(err)
+	}
+
+	return err
+}
+
 func Trace(skips ...int) Option {
 	if len(skips) == 0 {
 		skips = []int{1}
