@@ -152,10 +152,6 @@ func (self *ErrX) MarshalErrors() (msgs []json.RawMessage) {
 	)
 
 	for _, e = range self.errors {
-		if e == nil {
-			continue
-		}
-
 		// data.Errors = append(data.Errors, fmt.Sprintf("%v", e))
 		if _, ok = e.(*ErrX); ok {
 			msg, _ = json.Marshal(&e)
@@ -167,6 +163,14 @@ func (self *ErrX) MarshalErrors() (msgs []json.RawMessage) {
 	}
 
 	return msgs
+}
+
+func (self *ErrX) NumberOfErrors() int {
+	if self == nil {
+		return 0
+	}
+
+	return len(self.errors)
 }
 
 func (self ErrX) MarshalJSON() ([]byte, error) {
