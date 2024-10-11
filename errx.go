@@ -49,16 +49,6 @@ func NewErrXxx(options ...Option) (err *ErrX) {
 	return err
 }
 
-func Trace(skips ...int) Option {
-	if len(skips) == 0 {
-		skips = []int{1}
-	}
-
-	return func(self *ErrX) {
-		self.Trace(skips...)
-	}
-}
-
 func Kind(str string) Option {
 	return func(self *ErrX) {
 		self.WithKind(str)
