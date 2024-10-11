@@ -23,3 +23,13 @@ go.work.sum
 
 # env file
 .env
+
+# custom
+vendor/
+target/
+*.local
+configs/
+data/
+logs/
+site/
+docker-compose.*
