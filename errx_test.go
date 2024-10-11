@@ -108,8 +108,8 @@ func TestErr03(t *testing.T) {
 	var eE Error
 
 	eE = NewErrXxx()
-	fmt.Printf("==> Error: %t, %v\n", eE.IsNil(), eE)
+	fmt.Printf("==> 1. Error: %t, %v\n", eE.IsNil(), eE)
 
 	eE = NewErrX(nil)
-	fmt.Printf("==> Error: %t, %v\n", eE.IsNil(), eE)
+	fmt.Printf("==> 2. Error: %t, %v\n", eE.IsNil(), eE)
 }
