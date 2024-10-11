@@ -207,7 +207,39 @@ func (self *ErrX) Debug() (bts json.RawMessage) {
 	return bts
 }
 
-func ParallelRun(funcs ...func() error) (err *ErrX) {
+func ParallelRun(funcs ...func() *ErrX) (err *ErrX) {
+	var (
+		errs []*ErrX
+		wg   sync.WaitGroup
+	)
+
+	errs = make([]*ErrX, len(funcs))
+	wg.Add(len(funcs))
+
+	for i := range funcs {
+		go func(i int) {
+			errs[i] = funcs[i]()
+			wg.Done()
+		}(i)
+	}
+	wg.Wait()
+
+	for i := range errs {
+		if errs[i] == nil {
+			continue
+		}
+
+		if err == nil {
+			err = errs[i]
+		} else {
+			err.WithErr(errs[i])
+		}
+	}
+
+	return err
+}
+
+func ParallelRun2(funcs ...func() error) (err *ErrX) {
 	var (
 		hasError bool
 		ok       bool
