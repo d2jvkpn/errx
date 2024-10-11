@@ -14,9 +14,9 @@ import (
 type ErrX struct {
 	errors []error
 
-	Line int    `json:"line"`
 	Fn   string `json:"fn"`
 	File string `json:"file"`
+	Line int    `json:"line"`
 
 	Kind string `json:"kind"`
 	Code string `json:"code"`
@@ -167,18 +167,18 @@ func (self *ErrX) MarshalErrors() (msgs []json.RawMessage) {
 func (self *ErrX) MarshalJSON() ([]byte, error) {
 	data := struct {
 		Errors []json.RawMessage `json:"errors"`
-		Line   int               `json:"line,omitempty"`
 		Fn     string            `json:"fn,omitempty"`
 		File   string            `json:"file,omitempty"`
+		Line   int               `json:"line,omitempty"`
 
 		Kind string `json:"kind"`
 		Code string `json:"code"`
 		Msg  string `json:"msg"`
 	}{
 		Errors: self.MarshalErrors(),
-		Line:   self.Line,
 		Fn:     self.Fn,
 		File:   self.File,
+		Line:   self.Line,
 
 		Code: self.Code,
 		Kind: self.Kind,
@@ -212,16 +212,16 @@ func (self *ErrX) Debug() string {
 		strs = append(strs, fmt.Sprintf("msg=%q", self.Msg))
 	}
 
-	if self.Line > 0 {
-		strs = append(strs, fmt.Sprintf("lint=%d", self.Line))
-	}
-
 	if self.Fn != "" {
 		strs = append(strs, fmt.Sprintf("fn=%q", self.Fn))
 	}
 
 	if self.File != "" {
 		strs = append(strs, fmt.Sprintf("file=%q", self.File))
+	}
+
+	if self.Line > 0 {
+		strs = append(strs, fmt.Sprintf("lint=%d", self.Line))
 	}
 
 	builder.Grow(64)
