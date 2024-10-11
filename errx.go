@@ -17,10 +17,9 @@ type ErrX struct {
 	Msg  string `json:"msg"`
 
 	errors []error
-
-	Fn   string `json:"fn"`
-	File string `json:"file"`
-	Line int    `json:"line"`
+	fn     string
+	file   string
+	line   int
 }
 
 type Option func(*ErrX)
@@ -96,8 +95,8 @@ func (self *ErrX) Trace(skips ...int) *ErrX {
 		skip = skips[0]
 	}
 
-	pc, self.File, self.Line, _ = runtime.Caller(skip)
-	self.Fn = filepath.Base(runtime.FuncForPC(pc).Name())
+	pc, self.file, self.line, _ = runtime.Caller(skip)
+	self.fn = filepath.Base(runtime.FuncForPC(pc).Name())
 
 	return self
 }
@@ -188,9 +187,9 @@ func (self ErrX) MarshalJSON() ([]byte, error) {
 
 		Errors: self.MarshalErrors(),
 
-		Fn:   self.Fn,
-		File: self.File,
-		Line: self.Line,
+		Fn:   self.fn,
+		File: self.file,
+		Line: self.line,
 	}
 
 	return json.Marshal(data)
@@ -224,16 +223,16 @@ func (self *ErrX) Debug() string {
 		strs = append(strs, fmt.Sprintf("msg=%q", self.Msg))
 	}
 
-	if self.Fn != "" {
-		strs = append(strs, fmt.Sprintf("fn=%q", self.Fn))
+	if self.fn != "" {
+		strs = append(strs, fmt.Sprintf("fn=%q", self.fn))
 	}
 
-	if self.File != "" {
-		strs = append(strs, fmt.Sprintf("file=%q", self.File))
+	if self.file != "" {
+		strs = append(strs, fmt.Sprintf("file=%q", self.file))
 	}
 
-	if self.Line > 0 {
-		strs = append(strs, fmt.Sprintf("lint=%d", self.Line))
+	if self.line > 0 {
+		strs = append(strs, fmt.Sprintf("lint=%d", self.line))
 	}
 
 	builder.Grow(64)
