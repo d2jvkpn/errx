@@ -176,20 +176,18 @@ func (self ErrX) MarshalJSON() ([]byte, error) {
 		Msg  string `json:"msg"`
 
 		Errors []json.RawMessage `json:"errors"`
-
-		Fn   string `json:"fn,omitempty"`
-		File string `json:"file,omitempty"`
-		Line int    `json:"line,omitempty"`
+		Fn     string            `json:"fn,omitempty"`
+		File   string            `json:"file,omitempty"`
+		Line   int               `json:"line,omitempty"`
 	}{
 		Code: self.Code,
 		Kind: self.Kind,
 		Msg:  self.Msg,
 
 		Errors: self.MarshalErrors(),
-
-		Fn:   self.fn,
-		File: self.file,
-		Line: self.line,
+		Fn:     self.fn,
+		File:   self.file,
+		Line:   self.line,
 	}
 
 	return json.Marshal(data)
