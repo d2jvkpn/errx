@@ -103,3 +103,13 @@ func TestErrx02(t *testing.T) {
 
 	fmt.Printf("==> 6. err1 debug: %s\n", err1.Debug())
 }
+
+func TestErr03(t *testing.T) {
+	var eE Error
+
+	eE = NewErrXxx()
+	fmt.Printf("==> Error: %t, %v\n", eE.IsNil(), eE)
+
+	eE = NewErrX(nil)
+	fmt.Printf("==> Error: %t, %v\n", eE.IsNil(), eE)
+}
