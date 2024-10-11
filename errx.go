@@ -196,15 +196,15 @@ func (self *ErrX) Debug() string {
 	strs := make([]string, 0, 6)
 
 	if self.Kind != "" {
-		strs = append(strs, "kind="+self.Kind)
+		strs = append(strs, fmt.Sprintf("kind=%q", self.Kind))
 	}
 
 	if self.Code != "" {
-		strs = append(strs, "code="+self.Code)
+		strs = append(strs, fmt.Sprintf("code=%q", self.Code))
 	}
 
 	if self.Msg != "" {
-		strs = append(strs, "msg="+self.Msg)
+		strs = append(strs, fmt.Sprintf("msg=%q", self.Msg))
 	}
 
 	if self.Line > 0 {
@@ -212,7 +212,7 @@ func (self *ErrX) Debug() string {
 	}
 
 	if self.Fn != "" {
-		strs = append(strs, "fn="+self.Fn)
+		strs = append(strs, fmt.Sprintf("fn=%q", self.Fn))
 	}
 
 	errStr := "errors:"
