@@ -182,23 +182,25 @@ func (self *ErrX) MarshalErrors() (msgs []json.RawMessage) {
 
 func (self ErrX) MarshalJSON() ([]byte, error) {
 	data := struct {
-		Errors []json.RawMessage `json:"errors"`
-		Fn     string            `json:"fn,omitempty"`
-		File   string            `json:"file,omitempty"`
-		Line   int               `json:"line,omitempty"`
-
 		Kind string `json:"kind"`
 		Code string `json:"code"`
 		Msg  string `json:"msg"`
-	}{
-		Errors: self.MarshalErrors(),
-		Fn:     self.Fn,
-		File:   self.File,
-		Line:   self.Line,
 
+		Errors []json.RawMessage `json:"errors"`
+
+		Fn   string `json:"fn,omitempty"`
+		File string `json:"file,omitempty"`
+		Line int    `json:"line,omitempty"`
+	}{
 		Code: self.Code,
 		Kind: self.Kind,
 		Msg:  self.Msg,
+
+		Errors: self.MarshalErrors(),
+
+		Fn:   self.Fn,
+		File: self.File,
+		Line: self.Line,
 	}
 
 	return json.Marshal(data)
