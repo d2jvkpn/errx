@@ -193,7 +193,12 @@ func (self *ErrX) ErrKC() (string, string) {
 }
 
 func (self *ErrX) Debug() string {
-	strs := make([]string, 0, 6)
+	var (
+		strs    []string
+		builder strings.Builder
+	)
+
+	strs = make([]string, 0, 6)
 
 	if self.Kind != "" {
 		strs = append(strs, fmt.Sprintf("kind=%q", self.Kind))
@@ -215,12 +220,21 @@ func (self *ErrX) Debug() string {
 		strs = append(strs, fmt.Sprintf("fn=%q", self.Fn))
 	}
 
-	errStr := "errors:"
-	for _, bts := range self.MarshalErrors() {
-		errStr += ("\n- " + string(bts))
+	if self.File != "" {
+		strs = append(strs, fmt.Sprintf("file=%q", self.File))
 	}
 
-	return strings.Join(strs, "; ") + "\n" + errStr
+	builder.Grow(64)
+	builder.WriteString(strings.Join(strs, "; "))
+
+	builder.WriteString("\nerrors:")
+
+	for _, bts := range self.MarshalErrors() {
+		builder.WriteString("\n- ")
+		builder.Write(bts)
+	}
+
+	return builder.String()
 }
 
 func ParallelRun(funcs ...func() *ErrX) (err *ErrX) {
