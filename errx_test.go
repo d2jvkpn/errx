@@ -26,11 +26,11 @@ func TestErrx01(t *testing.T) {
 
 	// errx = new(ErrX)
 	err = NewErrX(errors.New("wrong"))
-	err.WithCode("code42").WithKind("kind42").WithKind("kind_xx")
+	err.WithKind("kind42").WithKind("kind_xx").WithCode("code42")
 
-	fmt.Printf("==> b1. ErrX=%+#v\n", err)
+	fmt.Printf("==> b1. ErrX: %+#v\n", err)
 
-	fmt.Printf("==> b2. errors=%v\n", err.errors)
+	fmt.Printf("==> b2. errors: %v\n", err.errors)
 
 	// 3.
 	err = fn01ErrX()
@@ -51,10 +51,10 @@ func TestErrx01(t *testing.T) {
 	err = NewErrX(errors.New("e1"))
 	err.WithErr(errors.New("e2")).WithKind("kind01").Trace()
 
-	fmt.Printf("==> d3. ErrX=%v\n", err)
+	fmt.Printf("==> d3. ErrX: %v\n", err)
 
 	bts, _ = json.Marshal(err)
-	fmt.Printf("==> d3. json=%s\n", bts)
+	fmt.Printf("==> d3. json: %s\n", bts)
 
 	e = testBizError(errors.New("account not found")).WithMsg("account not exists")
 	err = ErrXFrom(e)
@@ -74,20 +74,20 @@ func fn02ErrX() (e error) {
 }
 
 func testBizError(e error) (err *ErrX) {
-	return NewErrX(e).Trace(2).WithCode("Biz").WithKind("NotFound")
+	return NewErrX(e).Trace(2).WithKind("biz_error").WithCode("NotFound")
 }
 
 func TestErrx02(t *testing.T) {
 	var err1, err2 *ErrX
 
-	err1 = NewErrX(errors.New("..."), Code("biz_error")).WithKind("NotFound").Trace()
+	err1 = NewErrXxx(Code("NotFound")).WithKind("biz_error").Trace()
 
 	fmt.Printf("==> 1. err1: %+#v\n", err1)
 
-	err2 = NewErrX(errors.New("an error"), Code("internal_error")).WithKind("DBError").Trace()
+	err2 = NewErrX(errors.New("an error"), Code("DBError")).WithKind("internal_error").Trace()
 
 	err1.WithErr(err2)
-	fmt.Printf("==> 2. err1=%+#v\n", err1)
+	fmt.Printf("==> 2. err1: %+#v\n", err1)
 
 	bts, _ := json.Marshal(err1)
 	fmt.Printf("==> 3. err1 json: %s\n", bts)
