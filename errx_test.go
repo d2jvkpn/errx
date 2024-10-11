@@ -60,9 +60,9 @@ func TestErrx01(t *testing.T) {
 	err = ErrXFrom(e)
 	err.WithErr(errors.New("sorry")).WithErr(nil)
 	bts, _ = json.Marshal(err)
-	fmt.Printf("==> d4. json=%s\n", bts)
+	fmt.Printf("==> d4. json: %s\n", bts)
 
-	fmt.Printf("==> d5. debug=%s\n", err.Debug())
+	fmt.Printf("==> d5. debug: %s\n", err.Debug())
 }
 
 func fn01ErrX() (err *ErrX) {
@@ -92,5 +92,5 @@ func TestErrx02(t *testing.T) {
 	bts, _ := json.Marshal(err1)
 	fmt.Printf("==> 3. err1 json: %s\n", bts)
 
-	fmt.Printf("==> 4. err1 debugs: %s\n", err1.Debug())
+	fmt.Printf("==> 4. err1 debug: %s\n", err1.Debug())
 }
