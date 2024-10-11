@@ -12,15 +12,15 @@ import (
 )
 
 type ErrX struct {
+	Kind string `json:"kind"`
+	Code string `json:"code"`
+	Msg  string `json:"msg"`
+
 	errors []error
 
 	Fn   string `json:"fn"`
 	File string `json:"file"`
 	Line int    `json:"line"`
-
-	Kind string `json:"kind"`
-	Code string `json:"code"`
-	Msg  string `json:"msg"`
 }
 
 type Option func(*ErrX)
@@ -180,7 +180,7 @@ func (self *ErrX) MarshalErrors() (msgs []json.RawMessage) {
 	return msgs
 }
 
-func (self *ErrX) MarshalJSON() ([]byte, error) {
+func (self ErrX) MarshalJSON() ([]byte, error) {
 	data := struct {
 		Errors []json.RawMessage `json:"errors"`
 		Fn     string            `json:"fn,omitempty"`
