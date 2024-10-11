@@ -78,17 +78,19 @@ func testBizError(e error) (err *ErrX) {
 }
 
 func TestErrx02(t *testing.T) {
-	var errx, e2 *ErrX
+	var err1, err2 *ErrX
 
-	errx = NewErrX(errors.New("..."), Code("biz_error")).WithKind("NotFound").Trace()
+	err1 = NewErrX(errors.New("..."), Code("biz_error")).WithKind("NotFound").Trace()
 
-	fmt.Printf("==> 1. %+#v\n", errx)
+	fmt.Printf("==> 1. err1: %+#v\n", err1)
 
-	e2 = NewErrX(errors.New("an error"), Code("internal_error")).WithKind("DBError").Trace()
+	err2 = NewErrX(errors.New("an error"), Code("internal_error")).WithKind("DBError").Trace()
 
-	errx.WithErr(e2)
-	fmt.Printf("==> 2. %+#v\n", errx)
+	err1.WithErr(err2)
+	fmt.Printf("==> 2. err1=%+#v\n", err1)
 
-	bts, _ := json.Marshal(errx)
-	fmt.Printf("==> 2. %s\n", bts)
+	bts, _ := json.Marshal(err1)
+	fmt.Printf("==> 3. err1 json: %s\n", bts)
+
+	fmt.Printf("==> 4. err1 debugs: %s\n", err1.Debug())
 }

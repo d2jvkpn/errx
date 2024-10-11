@@ -3,7 +3,8 @@ package errx
 import (
 	"encoding/json"
 	"errors"
-	// "fmt"
+	"fmt"
+	"strings"
 	"sync"
 
 	"path/filepath"
@@ -191,21 +192,35 @@ func (self *ErrX) ErrKC() (string, string) {
 	return self.Kind, self.Code
 }
 
-func (self *ErrX) Debug() (bts json.RawMessage) {
-	data := struct {
-		Errors []json.RawMessage `json:"errors"`
-		Line   int               `json:"line"`
-		Fn     string            `json:"fn"`
-		File   string            `json:"file"`
-	}{
-		Errors: self.MarshalErrors(),
-		Line:   self.Line,
-		Fn:     self.Fn,
-		File:   self.File,
+func (self *ErrX) Debug() string {
+	strs := make([]string, 0, 6)
+
+	if self.Kind != "" {
+		strs = append(strs, "kind="+self.Kind)
 	}
 
-	bts, _ = json.Marshal(data)
-	return bts
+	if self.Code != "" {
+		strs = append(strs, "code="+self.Code)
+	}
+
+	if self.Msg != "" {
+		strs = append(strs, "msg="+self.Msg)
+	}
+
+	if self.Line > 0 {
+		strs = append(strs, fmt.Sprintf("lint=%d", self.Line))
+	}
+
+	if self.Fn != "" {
+		strs = append(strs, "fn="+self.Fn)
+	}
+
+	errStr := "errors:"
+	for _, bts := range self.MarshalErrors() {
+		errStr += ("\n- " + string(bts))
+	}
+
+	return strings.Join(strs, "; ") + "\n" + errStr
 }
 
 func ParallelRun(funcs ...func() *ErrX) (err *ErrX) {
