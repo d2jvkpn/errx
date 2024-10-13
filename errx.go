@@ -251,10 +251,21 @@ func (self *ErrX) Error() string {
 	return builder.String()
 }
 
-// iterate errors.As(self.errors[i], target)
+// iterate errors.As(self.errors[i], target): target = New(CustomError)
 func (self *ErrX) As(target any) bool {
 	for i := range self.errors {
 		if errors.As(self.errors[i], target) {
+			return true
+		}
+	}
+
+	return false
+}
+
+// iterate errors.Is(self.errors[i], target): target = pkg.ErrorNotFound
+func (self *ErrX) Is(e error) bool {
+	for i := range self.errors {
+		if errors.Is(self.errors[i], e) {
 			return true
 		}
 	}
