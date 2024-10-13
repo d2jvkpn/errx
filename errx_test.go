@@ -167,7 +167,10 @@ func TestErr05(t *testing.T) {
 		return errors.Join(DBErr, e)
 	}
 
-	var errx = NewErrX(newDBErr(fmt.Errorf("..."))).Trace().WithCode("NotFound")
+	var errx = NewErrX(newDBErr(fmt.Errorf("..."))).
+		Trace().
+		WithKind("internal_error").
+		WithCode("InternalError")
 
 	fmt.Printf("==> 1. %v\n", errx)
 	fmt.Printf("==> 2. %t\n", errx.Is(DBErr))
