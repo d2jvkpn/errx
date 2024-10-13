@@ -108,6 +108,7 @@ func (self *ErrX) IsNil() bool {
 	return len(self.errors) == 0
 }
 
+/*
 func (self *ErrX) Error() string {
 	if self.IsNil() {
 		return "<nil>"
@@ -115,6 +116,7 @@ func (self *ErrX) Error() string {
 
 	return errors.Join(self.errors...).Error()
 }
+*/
 
 func (self *ErrX) WithErr(errs ...error) *ErrX {
 	for i := range errs {
@@ -183,8 +185,8 @@ func (self ErrX) MarshalJSON() ([]byte, error) {
 		File   string            `json:"file,omitempty"`
 		Line   int               `json:"line,omitempty"`
 	}{
-		Code: self.Code,
 		Kind: self.Kind,
+		Code: self.Code,
 		Msg:  self.Msg,
 
 		Errors: self.MarshalErrors(),
@@ -200,7 +202,7 @@ func (self *ErrX) ErrKC() (string, string) {
 	return self.Kind, self.Code
 }
 
-func (self *ErrX) Debug() string {
+func (self *ErrX) Error() string {
 	var (
 		strs    []string
 		builder strings.Builder
@@ -236,10 +238,10 @@ func (self *ErrX) Debug() string {
 		strs = append(strs, fmt.Sprintf("lint=%d", self.line))
 	}
 
+	strs = append(strs, "errors=")
+
 	builder.Grow(64)
 	builder.WriteString(strings.Join(strs, "; "))
-
-	builder.WriteString("\nerrors:")
 
 	for _, bts := range self.MarshalErrors() {
 		builder.WriteString("\n- ")
@@ -247,4 +249,14 @@ func (self *ErrX) Debug() string {
 	}
 
 	return builder.String()
+}
+
+func (self *ErrX) As(target any) bool {
+	for i := range self.errors {
+		if errors.As(self.errors[i], target) {
+			return true
+		}
+	}
+
+	return false
 }
