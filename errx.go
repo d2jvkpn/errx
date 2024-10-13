@@ -272,3 +272,13 @@ func (self *ErrX) Is(e error) bool {
 
 	return false
 }
+
+func (self *ErrX) CopyErrors() (errs []error) {
+	errs = make([]error, len(self.errors))
+
+	for i := range self.errors {
+		errs[i] = self.errors[i]
+	}
+
+	return errs
+}
