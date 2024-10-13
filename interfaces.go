@@ -1,10 +1,60 @@
 package errx
 
 import (
-// "fmt"
+	"fmt"
+	"strings"
 )
 
 type Error interface {
 	Error() string
 	IsNil() bool
+}
+
+func (self *ErrX) Error() string {
+	var (
+		strs    []string
+		builder strings.Builder
+	)
+
+	if self == nil {
+		return "<nil>"
+	}
+
+	strs = make([]string, 0, 6)
+
+	if self.Kind != "" {
+		strs = append(strs, fmt.Sprintf("kind=%q", self.Kind))
+	}
+
+	if self.Code != "" {
+		strs = append(strs, fmt.Sprintf("code=%q", self.Code))
+	}
+
+	if self.Msg != "" {
+		strs = append(strs, fmt.Sprintf("msg=%q", self.Msg))
+	}
+
+	if self.fn != "" {
+		strs = append(strs, fmt.Sprintf("fn=%q", self.fn))
+	}
+
+	if self.file != "" {
+		strs = append(strs, fmt.Sprintf("file=%q", self.file))
+	}
+
+	if self.line > 0 {
+		strs = append(strs, fmt.Sprintf("lint=%d", self.line))
+	}
+
+	strs = append(strs, "errors=")
+
+	builder.Grow(64)
+	builder.WriteString(strings.Join(strs, "; "))
+
+	for _, bts := range self.MarshalErrors() {
+		builder.WriteString("\n- ")
+		builder.Write(bts)
+	}
+
+	return builder.String()
 }
