@@ -47,19 +47,19 @@ func NewErrXxx(options ...Option) (err *ErrX) {
 
 func Kind(str string) Option {
 	return func(self *ErrX) {
-		self.WithKind(str)
+		self.Kind = str
 	}
 }
 
 func Code(str string) Option {
 	return func(self *ErrX) {
-		self.WithCode(str)
+		self.Code = str
 	}
 }
 
 func Msg(str string) Option {
 	return func(self *ErrX) {
-		self.WithMsg(str)
+		self.Msg = str
 	}
 }
 

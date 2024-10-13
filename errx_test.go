@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"runtime"
 	"testing"
 )
 
@@ -152,4 +153,9 @@ func TestErr04(t *testing.T) {
 	e1 = errors.Join(errors.New("an_error"), err1)
 	fmt.Printf("==> 8. %t\n", errors.As(e1, &e4)) // true
 	fmt.Printf("==> 9. %v\n", e4)
+}
+
+func TestCaller(t *testing.T) {
+	_, file, line, ok := runtime.Caller(-1)
+	fmt.Println("~~~", file, line, ok)
 }
