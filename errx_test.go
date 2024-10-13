@@ -160,18 +160,19 @@ func TestCaller(t *testing.T) {
 	fmt.Println("~~~", file, line, ok)
 }
 
+var _DBErr = errors.New("database_error")
+
 func TestErr05(t *testing.T) {
-	var DBErr = errors.New("database_error")
 
-	newDBErr := func(e error) error {
-		return errors.Join(DBErr, e)
-	}
-
-	var errx = NewErrX(newDBErr(fmt.Errorf("..."))).
-		Trace().
-		WithKind("internal_error").
-		WithCode("InternalError")
+	var errx = newDBErr(fmt.Errorf("...")).Trace()
 
 	fmt.Printf("==> 1. %v\n", errx)
-	fmt.Printf("==> 2. %t\n", errx.Is(DBErr))
+	fmt.Printf("==> 2. %t\n", errx.Is(_DBErr))
+}
+
+func newDBErr(e error) *ErrX {
+	return NewErrX(_DBErr).
+		WithErr(e).
+		WithKind("internal_error").
+		WithCode("InternalError")
 }

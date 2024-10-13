@@ -45,6 +45,10 @@ func NewErrXxx(options ...Option) (err *ErrX) {
 	return err
 }
 
+func Eee() error {
+	return errors.New("...")
+}
+
 func Kind(str string) Option {
 	return func(self *ErrX) {
 		self.Kind = str
