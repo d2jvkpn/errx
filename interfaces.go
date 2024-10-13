@@ -40,6 +40,7 @@ func (self *ErrX) Error() string {
 
 	strs = make([]string, 0, 6)
 
+	//
 	if self.Kind != "" {
 		strs = append(strs, fmt.Sprintf("kind=%q", self.Kind))
 	}
@@ -52,6 +53,7 @@ func (self *ErrX) Error() string {
 		strs = append(strs, fmt.Sprintf("msg=%q", self.Msg))
 	}
 
+	//
 	if self.fn != "" {
 		strs = append(strs, fmt.Sprintf("fn=%q", self.fn))
 	}
@@ -64,6 +66,7 @@ func (self *ErrX) Error() string {
 		strs = append(strs, fmt.Sprintf("lint=%d", self.line))
 	}
 
+	//
 	strs = append(strs, "errors=")
 
 	builder.Grow(64)

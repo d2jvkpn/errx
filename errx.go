@@ -84,11 +84,11 @@ func ErrXFrom(e error, options ...Option) (err *ErrX) {
 
 func (self *ErrX) Trace(skips ...int) *ErrX {
 	var (
-		skip int
+		skip int = 1
 		pc   uintptr
 	)
 
-	if skip = 1; len(skips) > 0 {
+	if len(skips) > 0 {
 		skip = skips[0]
 	}
 
