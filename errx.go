@@ -251,6 +251,7 @@ func (self *ErrX) Error() string {
 	return builder.String()
 }
 
+// iterate errors.As(self.errors[i], target)
 func (self *ErrX) As(target any) bool {
 	for i := range self.errors {
 		if errors.As(self.errors[i], target) {
