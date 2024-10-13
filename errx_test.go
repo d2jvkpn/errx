@@ -159,3 +159,16 @@ func TestCaller(t *testing.T) {
 	_, file, line, ok := runtime.Caller(-1)
 	fmt.Println("~~~", file, line, ok)
 }
+
+func TestErr05(t *testing.T) {
+	var DBErr = errors.New("database_error")
+
+	newDBErr := func(e error) error {
+		return errors.Join(DBErr, e)
+	}
+
+	var errx = NewErrX(newDBErr(fmt.Errorf("..."))).Trace().WithCode("NotFound")
+
+	fmt.Printf("==> 1. %v\n", errx)
+	fmt.Printf("==> 2. %t\n", errx.Is(DBErr))
+}
