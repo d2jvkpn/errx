@@ -98,24 +98,6 @@ func (self *ErrX) Trace(skips ...int) *ErrX {
 	return self
 }
 
-func (self *ErrX) IsNil() bool {
-	if self == nil {
-		return true
-	}
-
-	return len(self.errors) == 0
-}
-
-/*
-func (self *ErrX) Error() string {
-	if self.IsNil() {
-		return "<nil>"
-	}
-
-	return errors.Join(self.errors...).Error()
-}
-*/
-
 func (self *ErrX) WithErr(errs ...error) *ErrX {
 	for i := range errs {
 		if errs[i] != nil {

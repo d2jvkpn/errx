@@ -10,6 +10,24 @@ type Error interface {
 	IsNil() bool
 }
 
+func (self *ErrX) IsNil() bool {
+	if self == nil {
+		return true
+	}
+
+	return len(self.errors) == 0
+}
+
+/*
+func (self *ErrX) Error() string {
+	if self.IsNil() {
+		return "<nil>"
+	}
+
+	return errors.Join(self.errors...).Error()
+}
+*/
+
 func (self *ErrX) Error() string {
 	var (
 		strs    []string
