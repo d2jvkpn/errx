@@ -2,7 +2,7 @@ package errx
 
 import (
 	"errors"
-	//"fmt"
+	// "fmt"
 	"sync"
 )
 
