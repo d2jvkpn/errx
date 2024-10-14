@@ -126,6 +126,7 @@ func (self *ErrX) WithCode(str string) *ErrX {
 
 func (self *ErrX) WithMsg(str string) *ErrX {
 	self.Msg = str
+
 	return self
 }
 
