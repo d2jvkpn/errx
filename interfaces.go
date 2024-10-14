@@ -34,11 +34,11 @@ func (self *ErrX) Error() string {
 		builder strings.Builder
 	)
 
-	if self == nil {
+	if self == nil || len(self.errors) == 0 {
 		return "<nil>"
 	}
 
-	strs = make([]string, 0, 6)
+	strs = make([]string, 0, 7)
 
 	//
 	if self.Kind != "" {
