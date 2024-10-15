@@ -102,6 +102,10 @@ func (self *ErrX) Trace(skips ...int) *ErrX {
 	return self
 }
 
+func (self *ErrX) Traced() bool {
+	return self.fn != ""
+}
+
 func (self *ErrX) WithErr(errs ...error) *ErrX {
 	for i := range errs {
 		if errs[i] != nil {
@@ -205,6 +209,7 @@ func (self *ErrX) Is(e error) bool {
 	return false
 }
 
+// copy errors of the *ErrX
 func (self *ErrX) CopyErrors() (errs []error) {
 	errs = make([]error, len(self.errors))
 
@@ -213,4 +218,17 @@ func (self *ErrX) CopyErrors() (errs []error) {
 	}
 
 	return errs
+}
+
+// compare the kind and code of two *ErrX
+func (self *ErrX) Equals(other *ErrX) bool {
+	switch {
+	case self == nil && other == nil:
+		return true
+	case self != nil && other != nil:
+	default:
+		return false
+	}
+
+	return self.Kind == other.Kind && self.Code == other.Code
 }

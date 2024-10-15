@@ -40,7 +40,7 @@ func (self *ErrX) Error() string {
 
 	strs = make([]string, 0, 7)
 
-	//
+	// kind, code and msg
 	if self.Kind != "" {
 		strs = append(strs, fmt.Sprintf("kind=%q", self.Kind))
 	}
@@ -53,7 +53,7 @@ func (self *ErrX) Error() string {
 		strs = append(strs, fmt.Sprintf("msg=%q", self.Msg))
 	}
 
-	//
+	// fn, file and line
 	if self.fn != "" {
 		strs = append(strs, fmt.Sprintf("fn=%q", self.fn))
 	}
@@ -66,7 +66,9 @@ func (self *ErrX) Error() string {
 		strs = append(strs, fmt.Sprintf("lint=%d", self.line))
 	}
 
-	//
+	// errors=
+	// - err1
+	// - err2
 	strs = append(strs, "errors=")
 
 	builder.Grow(64)

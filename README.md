@@ -1,7 +1,8 @@
 # errx
 An extension of Golang's error type that implements error tracking and encoding (kind &amp; code).
 
-1. structure
+
+#### C01. structure
 ```go
 type ErrX struct {
 	Kind string `json:"kind"`
