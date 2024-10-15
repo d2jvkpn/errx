@@ -163,7 +163,6 @@ func TestCaller(t *testing.T) {
 var _DBErr = errors.New("database_error")
 
 func TestErr05(t *testing.T) {
-
 	var errx = newDBErr(fmt.Errorf("...")).Trace()
 
 	fmt.Printf("==> 1. %v\n", errx)
