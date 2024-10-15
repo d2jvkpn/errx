@@ -67,8 +67,8 @@ func (self *ErrX) Error() string {
 	}
 
 	// errors=
-	// - err1
-	// - err2
+	// - "error1"
+	// - "error2"
 	strs = append(strs, "errors=")
 
 	builder.Grow(64)
