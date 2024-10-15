@@ -175,3 +175,20 @@ func newDBErr(e error) *ErrX {
 		WithKind("internal_error").
 		WithCode("InternalError")
 }
+
+func TestJSON(t *testing.T) {
+	var (
+		e   error
+		bts []byte
+	)
+
+	e = errors.New("...")
+	bts, _ = json.Marshal(e)
+	fmt.Printf("==> %s\n", bts)
+
+	bts, _ = json.Marshal(&e)
+	fmt.Printf("==> %s\n", bts)
+
+	bts, _ = json.Marshal(e.Error())
+	fmt.Printf("==> %s\n", bts)
+}
