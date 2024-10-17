@@ -1,0 +1,6 @@
+#!/bin/bash
+
+>&2 echo "==> git hooks: pre-commit"
+
+go fmt ./...
+go vet ./...
