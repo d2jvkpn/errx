@@ -2,5 +2,9 @@
 
 >&2 echo "==> git hooks: pre-commit"
 
+go mod tidy
+if [ -d vendor ]; then go mod vendor; fi
 go fmt ./...
 go vet ./...
+
+# TODO: auto tests
