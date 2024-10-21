@@ -3,7 +3,7 @@ package errx
 import (
 	"encoding/json"
 	"errors"
-	// "fmt"
+	"fmt"
 	"path/filepath"
 	"runtime"
 )
@@ -14,9 +14,10 @@ type ErrX struct {
 	Msg  string `json:"msg"`
 
 	errors []error
-	fn     string
-	file   string
-	line   int
+	//fn     string
+	//file   string
+	//line   int
+	Location string // fn::file::line
 }
 
 type Option func(*ErrX)
@@ -45,9 +46,11 @@ func NewErrXxx(options ...Option) (err *ErrX) {
 	return err
 }
 
+/*
 func Eee() error {
 	return errors.New("...")
 }
+*/
 
 func Kind(str string) Option {
 	return func(self *ErrX) {
@@ -68,22 +71,28 @@ func Msg(str string) Option {
 }
 
 // checks if the input is an ErrX
-func ErrXFrom(e error, options ...Option) (err *ErrX) {
-	var ok bool
-
+func ErrXFrom(e error, xs ...bool) (err *ErrX, ok bool) {
 	if e == nil {
-		return nil
+		return nil, false
 	}
 
-	if err, ok = e.(*ErrX); !ok {
+	if len(xs) > 0 && xs[0] {
+		if err, ok = e.(*ErrX); !ok {
+			err = NewErrX(e)
+		}
+	} else {
 		err = NewErrX(e)
 	}
 
-	for _, opt := range options {
-		opt(err)
+	return err, ok
+}
+
+func (self *ErrX) Apply(options ...Option) *ErrX {
+	for i := range options {
+		options[i](self)
 	}
 
-	return err
+	return self
 }
 
 func (self *ErrX) Trace(skips ...int) *ErrX {
@@ -96,14 +105,21 @@ func (self *ErrX) Trace(skips ...int) *ErrX {
 		skip = skips[0]
 	}
 
-	pc, self.file, self.line, _ = runtime.Caller(skip)
-	self.fn = filepath.Base(runtime.FuncForPC(pc).Name())
+	pc, file, line, ok := runtime.Caller(skip)
+	if ok {
+		self.Location = fmt.Sprintf(
+			"%s::%s::%d",
+			filepath.Base(runtime.FuncForPC(pc).Name()),
+			file,
+			line,
+		)
+	}
 
 	return self
 }
 
 func (self *ErrX) Traced() bool {
-	return self.fn != ""
+	return self.Location != ""
 }
 
 func (self *ErrX) WithErr(errs ...error) *ErrX {
@@ -169,19 +185,15 @@ func (self ErrX) MarshalJSON() ([]byte, error) {
 		Code string `json:"code"`
 		Msg  string `json:"msg"`
 
-		Errors []json.RawMessage `json:"errors"`
-		Fn     string            `json:"fn,omitempty"`
-		File   string            `json:"file,omitempty"`
-		Line   int               `json:"line,omitempty"`
+		Errors   []json.RawMessage `json:"errors"`
+		Location string            `json:"location,omitempty"`
 	}{
 		Kind: self.Kind,
 		Code: self.Code,
 		Msg:  self.Msg,
 
-		Errors: self.MarshalErrors(),
-		Fn:     self.fn,
-		File:   self.file,
-		Line:   self.line,
+		Errors:   self.MarshalErrors(),
+		Location: self.Location,
 	}
 
 	return json.Marshal(data)

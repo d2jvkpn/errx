@@ -58,7 +58,7 @@ func TestErrx01(t *testing.T) {
 	fmt.Printf("==> d3. json: %s\n", bts)
 
 	e = testBizError(errors.New("account not found")).WithMsg("account not exists")
-	err = ErrXFrom(e)
+	err, _ = ErrXFrom(e)
 	err.WithErr(errors.New("sorry")).WithErr(nil)
 	bts, _ = json.Marshal(err)
 	fmt.Printf("==> d4. json: %s\n", bts)

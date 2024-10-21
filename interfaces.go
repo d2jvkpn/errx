@@ -38,7 +38,7 @@ func (self *ErrX) Error() string {
 		return "<nil>"
 	}
 
-	strs = make([]string, 0, 7)
+	strs = make([]string, 0, 5)
 
 	// kind, code and msg
 	if self.Kind != "" {
@@ -54,16 +54,8 @@ func (self *ErrX) Error() string {
 	}
 
 	// fn, file and line
-	if self.fn != "" {
-		strs = append(strs, fmt.Sprintf("fn=%q", self.fn))
-	}
-
-	if self.file != "" {
-		strs = append(strs, fmt.Sprintf("file=%q", self.file))
-	}
-
-	if self.line > 0 {
-		strs = append(strs, fmt.Sprintf("lint=%d", self.line))
+	if self.Location != "" {
+		strs = append(strs, fmt.Sprintf("location=%q", self.Location))
 	}
 
 	// errors=
