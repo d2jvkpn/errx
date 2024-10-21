@@ -50,21 +50,15 @@ func Eee() error {
 */
 
 func Kind(str string) Option {
-	return func(self *ErrX) {
-		self.Kind = str
-	}
+	return func(self *ErrX) { self.Kind = str }
 }
 
 func Code(str string) Option {
-	return func(self *ErrX) {
-		self.Code = str
-	}
+	return func(self *ErrX) { self.Code = str }
 }
 
 func Msg(str string) Option {
-	return func(self *ErrX) {
-		self.Msg = str
-	}
+	return func(self *ErrX) { self.Msg = str }
 }
 
 // checks if the input is an ErrX
