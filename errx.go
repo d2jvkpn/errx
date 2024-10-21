@@ -14,10 +14,7 @@ type ErrX struct {
 	Msg  string `json:"msg"`
 
 	errors []error
-	//fn     string
-	//file   string
-	//line   int
-	Location string // fn::file::line
+	Caller string // fn::file::line
 }
 
 type Option func(*ErrX)
@@ -95,7 +92,7 @@ func (self *ErrX) Apply(options ...Option) *ErrX {
 	return self
 }
 
-func (self *ErrX) Trace(skips ...int) *ErrX {
+func (self *ErrX) WithCaller(skips ...int) *ErrX {
 	var (
 		skip int = 1
 		pc   uintptr
@@ -106,8 +103,9 @@ func (self *ErrX) Trace(skips ...int) *ErrX {
 	}
 
 	pc, file, line, ok := runtime.Caller(skip)
+
 	if ok {
-		self.Location = fmt.Sprintf(
+		self.Caller = fmt.Sprintf(
 			"%s::%s::%d",
 			filepath.Base(runtime.FuncForPC(pc).Name()),
 			file,
@@ -116,10 +114,6 @@ func (self *ErrX) Trace(skips ...int) *ErrX {
 	}
 
 	return self
-}
-
-func (self *ErrX) Traced() bool {
-	return self.Location != ""
 }
 
 func (self *ErrX) WithErr(errs ...error) *ErrX {
@@ -185,15 +179,15 @@ func (self ErrX) MarshalJSON() ([]byte, error) {
 		Code string `json:"code"`
 		Msg  string `json:"msg"`
 
-		Errors   []json.RawMessage `json:"errors"`
-		Location string            `json:"location,omitempty"`
+		Errors []json.RawMessage `json:"errors"`
+		Caller string            `json:"caller,omitempty"`
 	}{
 		Kind: self.Kind,
 		Code: self.Code,
 		Msg:  self.Msg,
 
-		Errors:   self.MarshalErrors(),
-		Location: self.Location,
+		Errors: self.MarshalErrors(),
+		Caller: self.Caller,
 	}
 
 	return json.Marshal(data)

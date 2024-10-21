@@ -50,7 +50,7 @@ func TestErrx01(t *testing.T) {
 	var bts []byte
 
 	err = NewErrX(errors.New("e1"))
-	err.WithErr(errors.New("e2")).WithKind("kind01").Trace()
+	err.WithErr(errors.New("e2")).WithKind("kind01").WithCaller()
 
 	fmt.Printf("==> d3. ErrX: %v\n", err)
 
@@ -75,7 +75,7 @@ func fn02ErrX() (e error) {
 }
 
 func testBizError(e error) (err *ErrX) {
-	return NewErrX(e).Trace(2).WithKind("biz_error").WithCode("NotFound")
+	return NewErrX(e).WithCaller(2).WithKind("biz_error").WithCode("NotFound")
 }
 
 func TestErrx02(t *testing.T) {
@@ -84,11 +84,11 @@ func TestErrx02(t *testing.T) {
 		bts        []byte
 	)
 
-	err1 = NewErrXxx(Code("NotFound")).WithKind("biz_error").Trace()
+	err1 = NewErrXxx(Code("NotFound")).WithKind("biz_error").WithCaller()
 
 	fmt.Printf("==> 1. err1: %+#v\n", err1)
 
-	err2 = NewErrX(errors.New("an error"), Code("DBError")).WithKind("internal_error").Trace()
+	err2 = NewErrX(errors.New("an error"), Code("DBError")).WithKind("internal_error").WithCaller()
 
 	err1.WithErr(err2)
 	fmt.Printf("==> 2. err1: %+#v\n", err1)
@@ -163,7 +163,7 @@ func TestCaller(t *testing.T) {
 var _DBErr = errors.New("database_error")
 
 func TestErr05(t *testing.T) {
-	var errx = newDBErr(fmt.Errorf("...")).Trace()
+	var errx = newDBErr(fmt.Errorf("...")).WithCaller()
 
 	fmt.Printf("==> 1. %v\n", errx)
 	fmt.Printf("==> 2. %t\n", errx.Is(_DBErr))

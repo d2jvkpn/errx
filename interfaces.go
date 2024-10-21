@@ -40,7 +40,6 @@ func (self *ErrX) Error() string {
 
 	strs = make([]string, 0, 5)
 
-	// kind, code and msg
 	if self.Kind != "" {
 		strs = append(strs, fmt.Sprintf("kind=%q", self.Kind))
 	}
@@ -53,9 +52,8 @@ func (self *ErrX) Error() string {
 		strs = append(strs, fmt.Sprintf("msg=%q", self.Msg))
 	}
 
-	// fn, file and line
-	if self.Location != "" {
-		strs = append(strs, fmt.Sprintf("location=%q", self.Location))
+	if self.Caller != "" {
+		strs = append(strs, fmt.Sprintf("caller=%q", self.Caller))
 	}
 
 	// errors=

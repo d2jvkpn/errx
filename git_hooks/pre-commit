@@ -7,4 +7,5 @@ if [ -d vendor ]; then go mod vendor; fi
 go fmt ./...
 go vet ./...
 
-# TODO: auto tests
+# Auto tests
+go test ./
