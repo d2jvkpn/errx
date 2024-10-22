@@ -8,6 +8,8 @@ import (
 	"testing"
 )
 
+var _DBErr = errors.New("database_error")
+
 func TestErrx01(t *testing.T) {
 	// 1.
 	var e error
@@ -159,8 +161,6 @@ func TestCaller(t *testing.T) {
 	_, file, line, ok := runtime.Caller(-1)
 	fmt.Println("~~~", file, line, ok)
 }
-
-var _DBErr = errors.New("database_error")
 
 func TestErr05(t *testing.T) {
 	var errx = newDBErr(fmt.Errorf("...")).WithCaller()
