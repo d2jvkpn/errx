@@ -87,10 +87,7 @@ func (self *ErrX) Apply(options ...Option) *ErrX {
 }
 
 func (self *ErrX) WithCaller(skips ...int) *ErrX {
-	var (
-		skip int = 1
-		pc   uintptr
-	)
+	var skip int = 1
 
 	if len(skips) > 0 {
 		skip = skips[0]
