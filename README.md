@@ -10,8 +10,6 @@ type ErrX struct {
 	Msg  string `json:"msg"`
 
 	errors []error
-	fn     string
-	file   string
-	line   int
+	Caller string // fn::file::line
 }
 ```
