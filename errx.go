@@ -172,7 +172,8 @@ func (self *ErrX) MarshalErrors() (msgs []json.RawMessage) {
 	return msgs
 }
 
-func (self *ErrX) NumberOfErrors() int {
+// size of self.errors
+func (self *ErrX) Size() int {
 	if self == nil {
 		return 0
 	}
