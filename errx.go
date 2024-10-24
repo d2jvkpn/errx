@@ -57,17 +57,23 @@ func Code(str string) Option {
 	return func(self *ErrX) { self.Code = str }
 }
 
-func Msg(str string) Option {
-	return func(self *ErrX) { self.Msg = str }
+func Msg(str string, args ...any) Option {
+	return func(self *ErrX) {
+		if len(args) == 0 {
+			self.Msg = str
+		} else {
+			self.Msg = fmt.Sprintf(str, args...)
+		}
+	}
 }
 
 // checks if the input is an ErrX
-func ErrXFrom(e error, xs ...bool) (err *ErrX, ok bool) {
+func ErrXFrom(e error, args ...bool) (err *ErrX, ok bool) {
 	if e == nil {
 		return nil, false
 	}
 
-	if len(xs) > 0 && xs[0] {
+	if len(args) > 0 && args[0] {
 		if err, ok = e.(*ErrX); !ok {
 			err = NewErrX(e)
 		}
@@ -117,6 +123,12 @@ func (self *ErrX) WithErr(errs ...error) *ErrX {
 	return self
 }
 
+func (self *ErrX) WithErrStr(str string, args ...any) *ErrX {
+	self.errors = append(self.errors, fmt.Errorf(str, args...))
+
+	return self
+}
+
 func (self *ErrX) WithKind(str string) *ErrX {
 	self.Kind = str
 
@@ -129,8 +141,12 @@ func (self *ErrX) WithCode(str string) *ErrX {
 	return self
 }
 
-func (self *ErrX) WithMsg(str string) *ErrX {
-	self.Msg = str
+func (self *ErrX) WithMsg(str string, args ...any) *ErrX {
+	if len(args) == 0 {
+		self.Msg = str
+	} else {
+		self.Msg = fmt.Sprintf(str, args...)
+	}
 
 	return self
 }
