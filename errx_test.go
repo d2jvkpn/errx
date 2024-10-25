@@ -184,11 +184,15 @@ func TestJSON(t *testing.T) {
 
 	e = errors.New("...")
 	bts, _ = json.Marshal(e)
-	fmt.Printf("==> %s\n", bts)
+	fmt.Printf("==> 1. %s\n", bts)
+
+	e = fmt.Errorf("...")
+	bts, _ = json.Marshal(e)
+	fmt.Printf("==> 2. %s\n", bts)
 
 	bts, _ = json.Marshal(&e)
-	fmt.Printf("==> %s\n", bts)
+	fmt.Printf("==> 3. %s\n", bts)
 
 	bts, _ = json.Marshal(e.Error())
-	fmt.Printf("==> %s\n", bts)
+	fmt.Printf("==> 4. %s\n", bts)
 }

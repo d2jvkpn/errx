@@ -6,7 +6,7 @@ import (
 	"sync"
 )
 
-func ParallelRun(funcs ...func() *ErrX) (err *ErrX) {
+func ParRun(funcs ...func() *ErrX) (err *ErrX) {
 	var (
 		errs []*ErrX
 		wg   sync.WaitGroup
@@ -38,7 +38,7 @@ func ParallelRun(funcs ...func() *ErrX) (err *ErrX) {
 	return err
 }
 
-func ParallelRun2(funcs ...func() error) (err *ErrX) {
+func ParRunE(funcs ...func() error) (err *ErrX) {
 	var (
 		hasError bool
 		ok       bool
