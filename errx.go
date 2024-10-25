@@ -9,9 +9,9 @@ import (
 )
 
 type ErrX struct {
-	Kind string `json:"kind"`
-	Code string `json:"code"`
-	Msg  string `json:"msg"`
+	Kind string
+	Code string
+	Msg  string
 
 	errors []error
 	Caller string // fn::file::line
