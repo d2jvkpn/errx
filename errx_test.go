@@ -195,4 +195,19 @@ func TestJSON(t *testing.T) {
 
 	bts, _ = json.Marshal(e.Error())
 	fmt.Printf("==> 4. %s\n", bts)
+
+	e = testError{E: "an error"}
+	bts, _ = json.Marshal(e)
+	fmt.Printf("==> 5. %s\n", bts)
+
+	bts, _ = json.Marshal(&e)
+	fmt.Printf("==> 6. %s\n", bts)
+}
+
+type testError struct {
+	E string
+}
+
+func (self testError) Error() string {
+	return self.E
 }

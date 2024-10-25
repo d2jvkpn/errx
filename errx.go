@@ -153,16 +153,16 @@ func (self *ErrX) WithMsg(str string, args ...any) *ErrX {
 
 func (self *ErrX) MarshalErrors() (msgs []json.RawMessage) {
 	var (
-		ok  bool
+		// ok  bool
 		e   error
 		msg json.RawMessage
 	)
 
 	for _, e = range self.errors {
 		// data.Errors = append(data.Errors, fmt.Sprintf("%v", e))
-		if _, ok = e.(*ErrX); ok {
-			msg, _ = json.Marshal(&e)
-		} else {
+		// _, ok = e.(*ErrX)
+		msg, _ = json.Marshal(&e)
+		if len(msg) == 0 || string(msg) == "{}" {
 			msg, _ = json.Marshal(e.Error())
 		}
 
