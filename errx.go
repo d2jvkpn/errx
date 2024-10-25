@@ -43,12 +43,6 @@ func NewErrXxx(options ...Option) (err *ErrX) {
 	return err
 }
 
-/*
-func Eee() error {
-	return errors.New("...")
-}
-*/
-
 func Kind(str string) Option {
 	return func(self *ErrX) { self.Kind = str }
 }
@@ -185,7 +179,7 @@ func (self ErrX) MarshalJSON() ([]byte, error) {
 	data := struct {
 		Kind string `json:"kind"`
 		Code string `json:"code"`
-		Msg  string `json:"msg"`
+		Msg  string `json:"msg,omitempty"`
 
 		Errors []json.RawMessage `json:"errors"`
 		Caller string            `json:"caller,omitempty"`
