@@ -117,7 +117,7 @@ func (self *ErrX) WithErr(errs ...error) *ErrX {
 	return self
 }
 
-func (self *ErrX) WithErrStr(str string, args ...any) *ErrX {
+func (self *ErrX) WithErrf(str string, args ...any) *ErrX {
 	self.errors = append(self.errors, fmt.Errorf(str, args...))
 
 	return self
