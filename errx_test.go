@@ -52,7 +52,7 @@ func TestErrx01(t *testing.T) {
 	var bts []byte
 
 	err = NewErrX(errors.New("e1"))
-	err.WithError(errors.New("e2")).WithKind("kind01").WithCaller()
+	err.WithErrors(errors.New("e2")).WithKind("kind01").WithCaller()
 
 	fmt.Printf("==> d3. ErrX: %v\n", err)
 
@@ -61,7 +61,7 @@ func TestErrx01(t *testing.T) {
 
 	e = testBizError(errors.New("account not found")).WithMsg("account not exists")
 	err, _ = ErrXFrom(e)
-	err.WithError(errors.New("sorry")).WithError(nil)
+	err.WithErrors(errors.New("sorry"), nil)
 	bts, _ = json.Marshal(err)
 	fmt.Printf("==> d4. json: %s\n", bts)
 
@@ -92,7 +92,7 @@ func TestErrx02(t *testing.T) {
 
 	err2 = NewErrX(errors.New("an error"), Code("DBError")).WithKind("internal_error").WithCaller()
 
-	err1.WithError(err2)
+	err1.WithErrors(err2)
 	fmt.Printf("==> 2. err1: %+#v\n", err1)
 
 	bts, _ = json.Marshal(err1)
@@ -170,10 +170,9 @@ func TestErr05(t *testing.T) {
 }
 
 func newDBErr(e error) *ErrX {
-	return NewErrX(_DBErr).
-		WithError(e).
-		WithKind("internal_error").
-		WithCode("InternalError")
+	return NewErrX(_DBErr).WithErrors(e).WithDefault("internal_error", "InternalError")
+	// WithKind("internal_error").
+	// WithCode("InternalError")
 }
 
 func TestJSON(t *testing.T) {
