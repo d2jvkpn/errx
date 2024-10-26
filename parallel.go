@@ -31,7 +31,7 @@ func ParRun(funcs ...func() *ErrX) (err *ErrX) {
 		if err == nil {
 			err = errs[i]
 		} else {
-			err.WithErr(errs[i])
+			err.WithError(errs[i])
 		}
 	}
 
@@ -78,7 +78,7 @@ func ParRunE(funcs ...func() error) (err *ErrX) {
 	if err == nil {
 		err = NewErrX(errors.Join(errs...))
 	} else {
-		err.WithErr(errs...)
+		err.WithError(errs...)
 	}
 
 	return err

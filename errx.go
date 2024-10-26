@@ -107,7 +107,7 @@ func (self *ErrX) WithCaller(skips ...int) *ErrX {
 	return self
 }
 
-func (self *ErrX) WithErr(errs ...error) *ErrX {
+func (self *ErrX) WithError(errs ...error) *ErrX {
 	for i := range errs {
 		if errs[i] != nil {
 			self.errors = append(self.errors, errs[i])
@@ -117,7 +117,7 @@ func (self *ErrX) WithErr(errs ...error) *ErrX {
 	return self
 }
 
-func (self *ErrX) WithErrf(str string, args ...any) *ErrX {
+func (self *ErrX) WithErrorf(str string, args ...any) *ErrX {
 	self.errors = append(self.errors, fmt.Errorf(str, args...))
 
 	return self
