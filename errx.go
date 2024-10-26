@@ -145,6 +145,22 @@ func (self *ErrX) WithMsg(str string, args ...any) *ErrX {
 	return self
 }
 
+func (self *ErrX) WithDefault(kind, code string, msgs ...string) *ErrX {
+	if self.Kind == "" {
+		self.Kind = kind
+	}
+
+	if self.Code == "" {
+		self.Code = code
+	}
+
+	if self.Msg == "" && len(msgs) > 0 {
+		self.Msg = msgs[0]
+	}
+
+	return self
+}
+
 func (self *ErrX) MarshalErrors() (msgs []json.RawMessage) {
 	var (
 		// ok  bool
@@ -217,7 +233,7 @@ func (self *ErrX) Is(e error) bool {
 	return false
 }
 
-// copy errors of the *ErrX
+// copy errors from the *ErrX
 func (self *ErrX) CopyErrors() (errs []error) {
 	errs = make([]error, len(self.errors))
 

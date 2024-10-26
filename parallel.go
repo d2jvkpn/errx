@@ -1,7 +1,7 @@
 package errx
 
 import (
-	"errors"
+	// "errors"
 	// "fmt"
 	"sync"
 )
@@ -76,7 +76,8 @@ func ParRunE(funcs ...func() error) (err *ErrX) {
 	}
 
 	if err == nil {
-		err = NewErrX(errors.Join(errs...))
+		// err = NewErrX(errors.Join(errs...))
+		err = &ErrX{errors: errs}
 	} else {
 		err.WithError(errs...)
 	}
