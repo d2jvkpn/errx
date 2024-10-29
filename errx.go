@@ -19,7 +19,7 @@ type ErrX struct {
 
 type Option func(*ErrX)
 
-func NewErrX(e error, options ...Option) (err *ErrX) {
+func New(e error, options ...Option) (err *ErrX) {
 	if e == nil {
 		return nil
 	}
@@ -33,7 +33,7 @@ func NewErrX(e error, options ...Option) (err *ErrX) {
 	return err
 }
 
-func NewErrXxx(options ...Option) (err *ErrX) {
+func Eee(options ...Option) (err *ErrX) {
 	err = &ErrX{errors: []error{errors.New("...")}}
 
 	for _, opt := range options {
@@ -41,6 +41,23 @@ func NewErrXxx(options ...Option) (err *ErrX) {
 	}
 
 	return err
+}
+
+// checks if the input is an ErrX
+func FromE(e error, args ...bool) (err *ErrX, ok bool) {
+	if e == nil {
+		return nil, false
+	}
+
+	if len(args) > 0 && args[0] {
+		if err, ok = e.(*ErrX); !ok {
+			err = New(e)
+		}
+	} else {
+		err = New(e)
+	}
+
+	return err, ok
 }
 
 func Kind(str string) Option {
@@ -59,23 +76,6 @@ func Msg(str string, args ...any) Option {
 			self.Msg = fmt.Sprintf(str, args...)
 		}
 	}
-}
-
-// checks if the input is an ErrX
-func ErrXFrom(e error, args ...bool) (err *ErrX, ok bool) {
-	if e == nil {
-		return nil, false
-	}
-
-	if len(args) > 0 && args[0] {
-		if err, ok = e.(*ErrX); !ok {
-			err = NewErrX(e)
-		}
-	} else {
-		err = NewErrX(e)
-	}
-
-	return err, ok
 }
 
 func (self *ErrX) Apply(options ...Option) *ErrX {

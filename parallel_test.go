@@ -8,10 +8,10 @@ import (
 func TestPar(t *testing.T) {
 	err := ParRun(
 		func() *ErrX {
-			return NewErrXxx().WithCode("c1").WithKind("k1").WithCaller()
+			return Eee().WithCode("c1").WithKind("k1").WithCaller()
 		},
 		func() *ErrX {
-			return NewErrXxx().WithCode("c2").WithKind("k2")
+			return Eee().WithCode("c2").WithKind("k2")
 		},
 	)
 

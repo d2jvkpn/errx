@@ -1,7 +1,7 @@
 package errx
 
 import (
-	"errors"
+	// "errors"
 	"fmt"
 	"strings"
 )
@@ -11,9 +11,11 @@ type Error interface {
 	IsNil() bool
 }
 
+/*
 func Eee() error {
 	return errors.New("...")
 }
+*/
 
 func (self *ErrX) IsNil() bool {
 	if self == nil {
