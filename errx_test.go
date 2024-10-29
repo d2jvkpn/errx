@@ -170,7 +170,7 @@ func TestErr05(t *testing.T) {
 }
 
 func newDBErr(e error) *ErrX {
-	return New(_DBErr).WithErrors(e).WithDefault("internal_error", "InternalError")
+	return New(_DBErr).WithErrors(e).WithDefault("internal_error", "InternalError", "")
 	// WithKind("internal_error").
 	// WithCode("InternalError")
 }

@@ -145,7 +145,7 @@ func (self *ErrX) WithMsg(str string, args ...any) *ErrX {
 	return self
 }
 
-func (self *ErrX) WithDefault(kind, code string, msgs ...string) *ErrX {
+func (self *ErrX) WithDefault(kind, code string, msg string, args ...any) *ErrX {
 	if self.Kind == "" {
 		self.Kind = kind
 	}
@@ -154,8 +154,12 @@ func (self *ErrX) WithDefault(kind, code string, msgs ...string) *ErrX {
 		self.Code = code
 	}
 
-	if self.Msg == "" && len(msgs) > 0 {
-		self.Msg = msgs[0]
+	if self.Msg == "" {
+		if len(args) == 0 {
+			self.Msg = msg
+		} else {
+			self.Msg = fmt.Sprintf(msg, args...)
+		}
 	}
 
 	return self
