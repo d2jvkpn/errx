@@ -9,11 +9,12 @@ import (
 )
 
 type ErrX struct {
+	errors []error
+
 	Kind string
 	Code string
 	Msg  string
 
-	errors []error
 	Caller string // fn::file::line
 }
 
@@ -41,6 +42,11 @@ func Eee(options ...Option) (err *ErrX) {
 	}
 
 	return err
+}
+
+func IsErrX(e error) (ok bool) {
+	_, ok = e.(*ErrX)
+	return ok
 }
 
 // checks if the input is an ErrX
