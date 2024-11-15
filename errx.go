@@ -9,12 +9,15 @@ import (
 )
 
 type ErrX struct {
+	// internal data: error array
 	errors []error
 
+	// fields for identification and api response
 	Kind string
 	Code string
 	Msg  string
 
+	// optinal tracer
 	Caller string // fn::file::line
 }
 
