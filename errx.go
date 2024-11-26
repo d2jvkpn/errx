@@ -37,7 +37,7 @@ func New(e error, options ...Option) (err *ErrX) {
 	return err
 }
 
-func Errf(msg string, a ...any) (err *ErrX) {
+func Errorf(msg string, a ...any) (err *ErrX) {
 	if len(a) == 0 {
 		return &ErrX{errors: []error{errors.New(msg)}}
 	} else {
