@@ -37,6 +37,14 @@ func New(e error, options ...Option) (err *ErrX) {
 	return err
 }
 
+func FromFmt(msg string, a ...any) (err *ErrX) {
+	if len(a) == 0 {
+		return &ErrX{errors: []error{errors.New(msg)}}
+	} else {
+		return &ErrX{errors: []error{fmt.Errorf(msg, a...)}}
+	}
+}
+
 func Eee(options ...Option) (err *ErrX) {
 	err = &ErrX{errors: []error{errors.New("...")}}
 
