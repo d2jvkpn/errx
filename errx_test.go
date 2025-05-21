@@ -28,8 +28,8 @@ func TestErrx01(t *testing.T) {
 	var err *ErrX
 
 	// errx = new(ErrX)
-	err = New(errors.New("wrong"))
-	err.WithKind("kind42").WithKind("kind_xx").WithCode("code42")
+	err = New(errors.New("wrong"), "kind42")
+	err.WithCode("code42")
 
 	fmt.Printf("==> b1. ErrX: %+#v\n", err)
 
@@ -44,15 +44,15 @@ func TestErrx01(t *testing.T) {
 	fmt.Printf("==> c2. %t, %t\n", e == nil, err.IsNil())
 	// false, true, true
 
-	err = New(nil)
+	err = New(nil, "xxx")
 	e = err
 	fmt.Printf("==> c3. is_nil=%t, e=%v\n", err.IsNil(), e)
 
 	// 4.
 	var bts []byte
 
-	err = New(errors.New("e1"))
-	err.WithErrors(errors.New("e2")).WithKind("kind01").WithCaller()
+	err = New(errors.New("e1"), "kind01")
+	err.WithErrors(errors.New("e2")).WithCaller()
 
 	fmt.Printf("==> d3. ErrX: %v\n", err)
 
@@ -60,7 +60,7 @@ func TestErrx01(t *testing.T) {
 	fmt.Printf("==> d3. json: %s\n", bts)
 
 	e = testBizError(errors.New("account not found")).WithMsg("account not exists")
-	err, _ = FromE(e)
+	err, _ = FromE(e, "eee")
 	err.WithErrors(errors.New("sorry"), nil)
 	bts, _ = json.Marshal(err)
 	fmt.Printf("==> d4. json: %s\n", bts)
@@ -77,7 +77,7 @@ func fn02ErrX() (e error) {
 }
 
 func testBizError(e error) (err *ErrX) {
-	return New(e).WithCaller(2).WithKind("biz_error").WithCode("NotFound")
+	return New(e, "biz_error").WithCaller(2).WithCode("NotFound")
 }
 
 func TestErrx02(t *testing.T) {
@@ -86,11 +86,11 @@ func TestErrx02(t *testing.T) {
 		bts        []byte
 	)
 
-	err1 = Eee(Code("NotFound")).WithKind("biz_error").WithCaller()
+	err1 = Eee("biz_error", Code("NotFound")).WithCaller()
 
 	fmt.Printf("==> 1. err1: %+#v\n", err1)
 
-	err2 = New(errors.New("an error"), Code("DBError")).WithKind("internal_error").WithCaller()
+	err2 = New(errors.New("an error"), "internal_error", Code("DBError")).WithCaller()
 
 	err1.WithErrors(err2)
 	fmt.Printf("==> 2. err1: %+#v\n", err1)
@@ -111,10 +111,10 @@ func TestErrx02(t *testing.T) {
 func TestErr03(t *testing.T) {
 	var eE Error
 
-	eE = Eee()
+	eE = Eee("xxx")
 	fmt.Printf("==> 1. Error: %t, %v\n", eE.IsNil(), eE)
 
-	eE = New(nil)
+	eE = New(nil, "xxx")
 	fmt.Printf("==> 2. Error: %t, %v\n", eE.IsNil(), eE)
 }
 
@@ -170,7 +170,7 @@ func TestErr05(t *testing.T) {
 }
 
 func newDBErr(e error) *ErrX {
-	return New(_DBErr).WithErrors(e).WithDefault("internal_error", "InternalError", "")
+	return New(_DBErr, "internal_error").WithErrors(e).WithDefault("database_error", "sorry...")
 	// WithKind("internal_error").
 	// WithCode("InternalError")
 }

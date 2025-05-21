@@ -13,9 +13,9 @@ type ErrX struct {
 	errors []error
 
 	// fields for identification and api response
-	Kind string
-	Code string
-	Msg  string
+	Kind string `json:"kind"`
+	Code string `json:"code"`
+	Msg  string `json:"msg"`
 
 	// optinal tracer
 	Caller string // fn::file::line
@@ -23,12 +23,12 @@ type ErrX struct {
 
 type Option func(*ErrX)
 
-func New(e error, options ...Option) (err *ErrX) {
+func New(e error, kind string, options ...Option) (err *ErrX) {
 	if e == nil {
 		return nil
 	}
 
-	err = &ErrX{errors: []error{e}}
+	err = &ErrX{errors: []error{e}, Kind: kind}
 
 	for _, opt := range options {
 		opt(err)
@@ -45,8 +45,8 @@ func Errorf(msg string, a ...any) (err *ErrX) {
 	}
 }
 
-func Eee(options ...Option) (err *ErrX) {
-	err = &ErrX{errors: []error{errors.New("...")}}
+func Eee(kind string, options ...Option) (err *ErrX) {
+	err = &ErrX{errors: []error{errors.New("...")}, Kind: kind}
 
 	for _, opt := range options {
 		opt(err)
@@ -61,25 +61,27 @@ func IsErrX(e error) (ok bool) {
 }
 
 // checks if the input is an ErrX
-func FromE(e error, args ...bool) (err *ErrX, ok bool) {
+func FromE(e error, kind string, args ...bool) (err *ErrX, ok bool) {
 	if e == nil {
 		return nil, false
 	}
 
 	if len(args) > 0 && args[0] {
 		if err, ok = e.(*ErrX); !ok {
-			err = New(e)
+			err = New(e, kind)
 		}
 	} else {
-		err = New(e)
+		err = New(e, kind)
 	}
 
 	return err, ok
 }
 
+/*
 func Kind(str string) Option {
 	return func(self *ErrX) { self.Kind = str }
 }
+*/
 
 func Code(str string) Option {
 	return func(self *ErrX) { self.Code = str }
@@ -140,11 +142,13 @@ func (self *ErrX) WithErrorf(str string, args ...any) *ErrX {
 	return self
 }
 
+/*
 func (self *ErrX) WithKind(str string) *ErrX {
 	self.Kind = str
 
 	return self
 }
+*/
 
 func (self *ErrX) WithCode(str string) *ErrX {
 	self.Code = str
@@ -162,11 +166,7 @@ func (self *ErrX) WithMsg(str string, args ...any) *ErrX {
 	return self
 }
 
-func (self *ErrX) WithDefault(kind, code string, msg string, args ...any) *ErrX {
-	if self.Kind == "" {
-		self.Kind = kind
-	}
-
+func (self *ErrX) WithDefault(code string, msg string, args ...any) *ErrX {
 	if self.Code == "" {
 		self.Code = code
 	}
