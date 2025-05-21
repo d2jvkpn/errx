@@ -13,9 +13,9 @@ type ErrX struct {
 	errors []error
 
 	// fields for identification and api response
-	Kind string `json:"kind"`
-	Code string `json:"code"`
-	Msg  string `json:"msg"`
+	Kind string
+	Code string
+	Msg  string
 
 	// optinal tracer
 	Caller string // fn::file::line
@@ -34,15 +34,11 @@ func New(e error, kind string, options ...Option) (err *ErrX) {
 		opt(err)
 	}
 
-	return err
-}
-
-func Errorf(msg string, a ...any) (err *ErrX) {
-	if len(a) == 0 {
-		return &ErrX{errors: []error{errors.New(msg)}}
-	} else {
-		return &ErrX{errors: []error{fmt.Errorf(msg, a...)}}
+	if err.Code == "" {
+		err.Code = err.Kind
 	}
+
+	return err
 }
 
 func Eee(kind string, options ...Option) (err *ErrX) {
@@ -50,6 +46,10 @@ func Eee(kind string, options ...Option) (err *ErrX) {
 
 	for _, opt := range options {
 		opt(err)
+	}
+
+	if err.Code == "" {
+		err.Code = err.Kind
 	}
 
 	return err
@@ -72,6 +72,10 @@ func FromE(e error, kind string, args ...bool) (err *ErrX, ok bool) {
 		}
 	} else {
 		err = New(e, kind)
+	}
+
+	if err.Code == "" {
+		err.Code = err.Kind
 	}
 
 	return err, ok
